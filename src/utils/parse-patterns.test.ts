@@ -19,6 +19,7 @@ describe("parsePatterns", () => {
 		const matchers = parsePatterns(patterns);
 		expect(matchers).toHaveLength(1);
 		expect(matchers[0]("Folder")).toEqual("Template");
+		expect(matchers[0]("OtherFolder")).toBeUndefined();
 	});
 
 	it("returns matchers for multiple simple text patterns", () => {
@@ -30,10 +31,13 @@ describe("parsePatterns", () => {
 	});
 
 	it("returns a matcher for a regex pattern", () => {
-		const patterns = "/Fo.*/:Template";
+		const patterns = "/Folder\\d/:Template";
 		const matchers = parsePatterns(patterns);
 		expect(matchers).toHaveLength(1);
-		expect(matchers[0]("Folder")).toEqual("Template");
+		expect(matchers[0]("Folder1")).toEqual("Template");
+		expect(matchers[0]("Folder2")).toEqual("Template");
+		expect(matchers[0]("Folder3")).toEqual("Template");
+		expect(matchers[0]("Folder/Subfolder")).toBeUndefined();
 	});
 
 	it("returns a matcher for a wildcard pattern", () => {
@@ -41,5 +45,18 @@ describe("parsePatterns", () => {
 		const matchers = parsePatterns(patterns);
 		expect(matchers).toHaveLength(1);
 		expect(matchers[0]("Folder")).toEqual("Template");
+		expect(matchers[0]("adjfgjsdfjsj")).toEqual("Template");
+		expect(matchers[0]("Deeply/Nested/Folder")).toEqual("Template");
+	});
+
+	it("returns a matcher for a longer regex pattern", () => {
+		const patterns = "/^Dates\\/\\d{4}-\\d{2}-\\d{2}$/:Daily";
+		const matchers = parsePatterns(patterns);
+		expect(matchers).toHaveLength(1);
+		expect(matchers[0]("Dates/2023-01-01")).toEqual("Daily");
+		expect(matchers[0]("Dates/1990-12-31")).toEqual("Daily");
+		expect(matchers[0]("Dates/Overview")).toBeUndefined();
+		expect(matchers[0]("Nested/Dates/1990-12-31")).toBeUndefined();
+		expect(matchers[0]("Dates/1990-12-31/Nested")).toBeUndefined();
 	});
 });
