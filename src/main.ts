@@ -1,5 +1,6 @@
 import { Notice, Plugin, TAbstractFile, TFile, normalizePath } from "obsidian";
-import { AutoTemplateSettings, AutoTemplateSettingsTab } from "./settings-tab";
+import AutoTemplateSettingsTab, { AutoTemplateSettings } from "./settings-tab";
+import parsePatterns from "./utils/parse-patterns";
 
 const DEFAULT_SETTINGS: AutoTemplateSettings = {
 	patterns: "",
@@ -8,32 +9,10 @@ const DEFAULT_SETTINGS: AutoTemplateSettings = {
 export default class AutoTemplatePlugin extends Plugin {
 	settings: AutoTemplateSettings;
 
-	validatePatterns(patterns: string) {
-		if (!patterns) return [];
-
-		const parsed = patterns.split("\n").map((line) => line.split(":"));
-		for (const element of parsed) {
-			if (element.length !== 2) {
-				throw new Error(
-					`Invalid template format: "${element.join(
-						":"
-					)}". Use "Folder:Template" format.`
-				);
-			}
-		}
-		return parsed;
-	}
-
-	resolveTemplate(file: TFile) {
-		const parsed = this.validatePatterns(this.settings.patterns);
-		for (const [pattern, template] of parsed) {
-			if (pattern.startsWith("/") && pattern.endsWith("/")) {
-				if (new RegExp(pattern.slice(1, -1)).test(file.path)) {
-					return template;
-				}
-			} else if (file.path.startsWith(pattern) || pattern === "*") {
-				return template;
-			}
+	matchTemplate(file: TFile) {
+		for (const matcher of parsePatterns(this.settings.patterns)) {
+			const match = matcher(file.path);
+			if (match) return match;
 		}
 	}
 
@@ -81,7 +60,7 @@ export default class AutoTemplatePlugin extends Plugin {
 	async onCreate(file: TAbstractFile) {
 		if (!(file instanceof TFile)) return;
 		try {
-			const template = this.resolveTemplate(file);
+			const template = this.matchTemplate(file);
 			if (!template) return;
 
 			const content = await this.getTemplateContent(template);

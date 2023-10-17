@@ -5,7 +5,7 @@ export interface AutoTemplateSettings {
 	patterns: string;
 }
 
-export class AutoTemplateSettingsTab extends PluginSettingTab {
+export default class AutoTemplateSettingsTab extends PluginSettingTab {
 	plugin: AutoTemplatePlugin;
 
 	constructor(app: App, plugin: AutoTemplatePlugin) {
