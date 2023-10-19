@@ -6,6 +6,32 @@ A simple, lightweight plugin that integrates with the [Templates core plugin](ht
 
 When a new note is created, its path is checked against your configured patterns. If a match is found, the configured template is automatically inserted into the new note. If no match is found, nothing happens. That's it!
 
+### Example
+
+Let's say I have a `Movie` template containing properties and sections:
+
+```
+---
+title: ""
+director: ""
+year: ""
+rating: 5
+---
+
+## Summary
+
+## Thoughts
+
+```
+
+I want to automatically apply this template to all notes created in the `Movies` folder. To do this, I would add the following pattern to the plugin's configuration:
+
+```
+Movies:Movie
+```
+
+Now, whenever I create a new note in `Movies/` or a nested directory like `Movies/Action/`, the `Movie` template will be automatically inserted into the new note.
+
 ## Patterns
 
 Patterns consist of two elements, a [folder](#folder) and a [template](#template):
