@@ -32,6 +32,8 @@ Movies:Movie
 
 Now, whenever I create a new note in `Movies/` or a nested directory like `Movies/Action/`, the `Movie` template will be automatically inserted into the new note.
 
+Note that if you create a note via a method that prefills its content, e.g. via the [note composer](https://help.obsidian.md/Plugins/Note+composer) core plugin, the template will be inserted above the prefilled content.
+
 ## Patterns
 
 Patterns consist of two elements, a [folder](#folder) and a [template](#template):

@@ -63,7 +63,15 @@ export default class AutoTemplatePlugin extends Plugin {
 			const template = this.matchTemplate(file);
 			if (!template) return;
 
-			const content = await this.getTemplateContent(template);
+			let content = await this.getTemplateContent(template);
+			// it's possible for the new file to already contain content,
+			// e.g. when creating a file via the note composer core plugin
+			const existingContent = await this.app.vault.adapter.read(
+				file.path
+			);
+			if (existingContent) {
+				content = content + existingContent;
+			}
 			await this.app.vault.adapter.write(file.path, content);
 		} catch (error) {
 			new Notice(error.message);
