@@ -1,7 +1,7 @@
 {
     "name": "obsidian-auto-template",
     "version": "1.0.0",
-    "description": "Automatically inserts a template when creating a new note",
+    "description": "Automatically insert a template when creating a new note",
     "main": "main.js",
     "scripts": {
         "dev": "node esbuild.config.mjs",
