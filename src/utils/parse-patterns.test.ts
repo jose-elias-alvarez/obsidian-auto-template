@@ -10,14 +10,14 @@ describe("parsePatterns", () => {
     it("throws an error when given a pattern without a template", () => {
         const patterns = "Folder";
         expect(() => parsePatterns(patterns)).toThrow(
-            'Invalid format: "Folder". Use "Folder:Template" format.',
+            'Invalid format: "Folder". Use "Folder:Template" format.'
         );
     });
 
     it("throws an error when given a pattern with too many elements", () => {
         const patterns = "Folder:Template:Extra";
         expect(() => parsePatterns(patterns)).toThrow(
-            'Invalid format: "Folder:Template:Extra". Use "Folder:Template" format.',
+            'Invalid format: "Folder:Template:Extra". Use "Folder:Template" format.'
         );
     });
 

@@ -8,8 +8,8 @@ export default (patterns: string) => {
         if (element.length !== 2) {
             throw new Error(
                 `Invalid format: "${element.join(
-                    ":",
-                )}". Use "Folder:Template" format.`,
+                    ":"
+                )}". Use "Folder:Template" format.`
             );
         }
 

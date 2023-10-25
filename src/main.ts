@@ -3,7 +3,7 @@ import AutoTemplateSettingsTab, { AutoTemplateSettings } from "./settings-tab";
 import parsePatterns from "./utils/parse-patterns";
 
 const DEFAULT_SETTINGS: AutoTemplateSettings = {
-    patterns: "",
+    patterns: ""
 };
 
 export default class AutoTemplatePlugin extends Plugin {
@@ -20,11 +20,11 @@ export default class AutoTemplatePlugin extends Plugin {
         let templatesConfig: string;
         try {
             templatesConfig = await this.app.vault.adapter.read(
-                normalizePath(this.app.vault.configDir + "/templates.json"),
+                normalizePath(this.app.vault.configDir + "/templates.json")
             );
         } catch {
             throw new Error(
-                "Failed to read templates config. Make sure the core plugin is enabled.",
+                "Failed to read templates config. Make sure the core plugin is enabled."
             );
         }
 
@@ -33,7 +33,7 @@ export default class AutoTemplatePlugin extends Plugin {
             templatesFolder = JSON.parse(templatesConfig).folder;
         } catch {
             throw new Error(
-                "Failed to get templates folder from templates config. Make sure you've configured a template folder location in the core plugin's settings.",
+                "Failed to get templates folder from templates config. Make sure you've configured a template folder location in the core plugin's settings."
             );
         }
 
@@ -46,12 +46,12 @@ export default class AutoTemplatePlugin extends Plugin {
                         templatesFolder +
                         "/" +
                         name +
-                        ".md",
-                ),
+                        ".md"
+                )
             );
         } catch {
             throw new Error(
-                `Failed to read template "${name}". Make sure the template exists in the configured template folder.`,
+                `Failed to read template "${name}". Make sure the template exists in the configured template folder.`
             );
         }
         return templateContent;
@@ -67,7 +67,7 @@ export default class AutoTemplatePlugin extends Plugin {
             // it's possible for the new file to already contain content,
             // e.g. when creating a file via the note composer core plugin
             const existingContent = await this.app.vault.adapter.read(
-                file.path,
+                file.path
             );
             if (existingContent) {
                 content = content + existingContent;
@@ -84,7 +84,7 @@ export default class AutoTemplatePlugin extends Plugin {
         this.addSettingTab(new AutoTemplateSettingsTab(this.app, this));
 
         this.app.workspace.onLayoutReady(() =>
-            this.app.vault.on("create", this.onCreate.bind(this)),
+            this.app.vault.on("create", this.onCreate.bind(this))
         );
     }
 
@@ -92,7 +92,7 @@ export default class AutoTemplatePlugin extends Plugin {
         this.settings = Object.assign(
             {},
             DEFAULT_SETTINGS,
-            await this.loadData(),
+            await this.loadData()
         );
     }
 
