@@ -63,6 +63,11 @@ export default class AutoTemplatePlugin extends Plugin {
             const template = this.matchTemplate(file);
             if (!template) return;
 
+            const timeSinceCreation = Date.now() - file.stat.ctime;
+            // HACK: when a note syncs to another obsidian instance, it fires a create event
+            // so we ignore files created more than 1 second ago, as these are not new files
+            if (timeSinceCreation > 1000) return;
+
             let content = await this.getTemplateContent(template);
             // it's possible for the new file to already contain content,
             // e.g. when creating a file via the note composer core plugin
